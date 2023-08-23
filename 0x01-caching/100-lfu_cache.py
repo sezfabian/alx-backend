@@ -2,10 +2,11 @@
 """LFU Caching module
 """
 from collections import deque
-BaseCaching = __import__('base_caching').BaseCaching
 from collections import defaultdict
 from heapq import heappop, heappush, heapify
-from base_caching import BaseCaching  # Assuming you have a base_caching module
+from base_caching import BaseCaching
+BaseCaching = __import__('base_caching').BaseCaching
+
 
 class LFUCache(BaseCaching):
     """LFU Caching System
@@ -50,7 +51,8 @@ class LFUCache(BaseCaching):
         while len(self.cache_data) >= self.MAX_ITEMS:
             while self.min_heap:
                 freq, min_key = heappop(self.min_heap)
-                if min_key in self.cache_data and self.frequency[min_key] == freq:
+                if min_key in self.cache_data and \
+                        self.frequency[min_key] == freq:
                     self.cache_data.pop(min_key)
                     self.frequency.pop(min_key)
                     if min_key != key:
@@ -79,4 +81,3 @@ class LFUCache(BaseCaching):
         for k, freq in self.frequency.items():
             heappush(temp_heap, (freq, k))
         self.min_heap = temp_heap
-
