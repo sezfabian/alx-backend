@@ -3,8 +3,11 @@
 Flask server app module
 """
 from flask import Flask, g, render_template, request
-from flask_babel import Babel, _
+from flask_babel import Babel, _, format_datetime
+from datetime import datetime
 from typing import Dict, Union
+from pytz import timezone, utc
+import pytz.exceptions
 
 template_folder = "templates"
 app = Flask(__name__)
@@ -43,6 +46,28 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
+
+@babel.timezoneselector
+def get_timezone():
+    """
+    Returns best matched timezone
+    """
+    if request.args.get('timezone'):
+        query_timezone = request.args.get('timezone')
+        try:
+            return timezone(query_timezone).zone
+        except pytz.exceptions.UnknownTimeZoneError:
+            return None
+    elif g.user:
+        user_timezone = g.user.get('timezone')
+        try:
+            return timezone(user_timezone).zone
+        except pytz.exceptions.UnknownTimeZoneError:
+            return None
+
+    return utc.zone
+
+
 def get_user() -> Union[Dict, None]:
     """
     Returns a user dictionary or None if the ID cannot be found
@@ -65,15 +90,20 @@ def before_request():
 
 
 @app.route("/")
-def index():
+def index() -> str:
     """
-    Render the index page
+    Returns index.html
     """
+    user_timezone = get_timezone()
+    current_time = format_datetime(datetime.now(user_timezone))
+    print(current_time)
+
     if g.user:
-        username = g.user['name']
+        username = g.user.get('name')
     else:
         username = None
-    return render_template('5-index.html', username=username)
+    return render_template('index.html', username=username,
+                           current_time=current_time)
 
 
 if __name__ == "__main__":
