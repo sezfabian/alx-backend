@@ -5,6 +5,8 @@ Flask server app module
 from flask import Flask, g, render_template, request
 from flask_babel import Babel, _
 from typing import Dict, Union
+from pytz import timezone, utc
+import pytz.exceptions
 
 template_folder = "templates"
 app = Flask(__name__)
@@ -43,6 +45,27 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
+@babel.timezoneselector
+def get_timezone():
+    """
+    Returns best matched timezone
+    """
+    if request.args.get('timezone'):
+        query_timezone = request.args.get('timezone')
+        try:
+            return timezone(query_timezone).zone
+        except pytz.exceptions.UnknownTimeZoneError:
+            return None
+    elif g.user:
+        user_timezone = g.user.get('timezone')
+        try:
+            return timezone(user_timezone).zone
+        except pytz.exceptions.UnknownTimeZoneError:
+            return None
+
+    return utc.zone
+
+
 def get_user() -> Union[Dict, None]:
     """
     Returns a user dictionary or None if the ID cannot be found
@@ -73,7 +96,7 @@ def index():
         username = g.user['name']
     else:
         username = None
-    return render_template('6-index.html', username=username)
+    return render_template('7-index.html', username=username)
 
 
 if __name__ == "__main__":
