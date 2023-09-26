@@ -1,0 +1,76 @@
+{
+  "name": "get-func-name",
+  "description": "Utility for getting a function's name for node and the browser",
+  "keywords": [
+    "get-func-name",
+    "chai util"
+  ],
+  "license": "MIT",
+  "author": "Jake Luer <jake@alogicalparadox.com> (http://alogicalparadox.com)",
+  "contributors": [
+    "Keith Cirkel (https://github.com/keithamus)",
+    "Lucas Fernandes da Costa (https://github.com/lucasfcosta)",
+    "Grant Snodgrass (https://github.com/meeber)",
+    "Lucas Vieira (https://github.com/vieiralucas)",
+    "Aleksey Shvayka (https://github.com/shvaikalesh)"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "type": "module",
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/chaijs/get-func-name.git"
+  },
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "pretest": "npm run lint",
+    "test": "npm run test:node && npm run test:browser && npm run upload-coverage",
+    "test:browser": "karma start karma.conf.cjs --singleRun=true",
+    "test:node": "istanbul cover _mocha",
+    "upload-coverage": "lcov-result-merger 'coverage/**/lcov.info' | coveralls; exit 0"
+  },
+  "config": {
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "strict/es6"
+    ],
+    "env": {
+      "es6": true
+    },
+    "globals": {
+      "HTMLElement": false
+    },
+    "rules": {
+      "complexity": 0,
+      "max-statements": 0,
+      "prefer-arrow-callback": "off"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "coveralls": "^3.1.1",
+    "eslint": "^7.32.0",
+    "eslint-config-strict": "^14.0.1",
+    "eslint-plugin-filenames": "^1.1.0",
+    "ghooks": "^2.0.4",
+    "istanbul": "^0.4.5",
+    "karma": "^6.3.4",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-mocha": "^2.0.1",
+    "lcov-result-merger": "^3.1.0",
+    "mocha": "^9.1.2",
+    "semantic-release": "^18.0.0",
+    "validate-commit-msg": "^2.3.1"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "version": "2.0.1"
+}
