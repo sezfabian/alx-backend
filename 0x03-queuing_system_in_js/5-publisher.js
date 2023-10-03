@@ -20,7 +20,7 @@ const publishMessage = (message, time) => {
     }, time);
 };
 
-publishMessage("Holberton Student #1 starts course", 1000);
-publishMessage("Holberton Student #2 starts course", 2000);
-publishMessage("KILL_SERVER", 3000);
-publishMessage("Holberton Student #3 starts course", 4000);
+publishMessage("Holberton Student #1 starts course", 100);
+publishMessage("Holberton Student #2 starts course", 200);
+publishMessage("KILL_SERVER", 300);
+publishMessage("Holberton Student #3 starts course", 400);
